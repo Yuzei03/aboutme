@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>.klyde.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="glow-bg" aria-hidden="true"></div>
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <!-- SPLASH / LANDING SCREEN -->
+  <section id="splash" class="splash">
+    <div class="splash-inner">
+      <h1 class="brand">.klyde.</h1>
+      <div class="divider"></div>
+      <button id="enterBtn" class="enter-btn">enter</button>
+      <p class="hint">click to enter — audio will play</p>
+    </div>
+  </section>
+
+  <!-- MAIN SITE -->
+  <div id="site" class="site">
+    <header class="topbar">
+      <nav class="navbar">
+        <span class="nav-brand">.klyde.</span>
+        <button class="tab active" data-page="home">home</button>
+        <button class="tab" data-page="about">about</button>
+        <div class="vol-control" title="Volume">
+          <button id="volMute" class="vol-icon" aria-label="Mute / unmute" type="button">
+            <svg class="icon-speaker" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path d="M11 5L6 9H3v6h3l5 4V5z" fill="currentColor"/>
+              <path class="wave wave1" d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              <path class="wave wave2" d="M18.5 6a8 8 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            <svg class="icon-muted" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style="display:none">
+              <path d="M11 5L6 9H3v6h3l5 4V5z" fill="currentColor"/>
+              <path d="M19 9l-6 6M13 9l6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="vol-track-wrap">
+            <input id="volSlider" class="vol-slider" type="range" min="0" max="100" value="40" aria-label="Volume" />
+            <div class="vol-track">
+              <div class="vol-fill" id="volFill"></div>
+              <div class="vol-thumb" id="volThumb"></div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main id="scrollArea">
+      <!-- HOME -->
+      <section id="home" class="page page-home">
+        <div class="page-inner home-hero">
+          <h1 class="hero-name">klyde</h1>
+          <p class="hero-aka">A.K.A. GLUCOSE</p>
+          <p class="hero-roles">student · gamer</p>
+        </div>
+        <div class="scroll-cue" aria-hidden="true">
+          <span>scroll</span>
+          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="page page-about">
+        <div class="page-inner about-wrap">
+          <div class="about-header">
+            <span class="section-num">01</span>
+            <h2 class="about-title">about <span>me</span></h2>
+          </div>
+          <div class="about-card">
+            <p class="about-text">
+              Hello there! I'm Klyde, also known as "Glucose." This is a small personal space for projects, streams, and whatever else I'm building. I care about clean design, solid code, and communities that feel good to be in. Outside of that you'll usually find me gaming, streaming, or tinkering with new ideas.
+            </p>
+            <div class="about-tags">
+              <span class="tag">student</span>
+              <span class="tag">gamer</span>
+            
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
