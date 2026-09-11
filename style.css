@@ -1,4 +1,4 @@
-/* ---------- reset & base ---------- */
+
 * { box-sizing: border-box; }
 
 html, body {
@@ -16,7 +16,7 @@ button {
   cursor: pointer;
 }
 
-/* ---------- ambient background glow + grid ---------- */
+
 .glow-bg {
   position: fixed;
   inset: 0;
@@ -40,7 +40,7 @@ button {
   -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 20%, transparent 75%);
 }
 
-/* ---------- splash screen — slide exit ---------- */
+
 .splash {
   position: fixed;
   inset: 0;
@@ -142,7 +142,7 @@ button {
   50%      { box-shadow: 0 0 26px rgba(255, 128, 202, 0.8), 0 0 58px rgba(255, 128, 202, 0.4); }
 }
 
-/* ---------- main site — slides up on enter ---------- */
+
 .site {
   position: relative;
   z-index: 1;
@@ -181,7 +181,7 @@ button {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ---------- topbar / navbar ---------- */
+
 .topbar {
   flex: 0 0 auto;
   display: flex;
@@ -236,7 +236,7 @@ button {
   transform: scale(0.96);
 }
 
-/* ---------- volume control ---------- */
+
 .vol-control {
   display: flex;
   align-items: center;
@@ -333,7 +333,7 @@ button {
     0 0 14px rgba(255, 143, 209, 0.95);
 }
 
-/* ---------- main scroll area ---------- */
+
 main {
   flex: 1 1 auto;
   min-height: 0;
@@ -377,7 +377,7 @@ main { scrollbar-width: none; }
   transform: translateY(18px);
 }
 
-/* ---------- HOME hero ---------- */
+
 .home-hero {
   display: flex;
   flex-direction: column;
@@ -414,7 +414,7 @@ main { scrollbar-width: none; }
   text-transform: lowercase;
 }
 
-/* ---------- ABOUT ---------- */
+
 .about-wrap {
   max-width: 720px;
   width: 100%;
@@ -491,7 +491,7 @@ main { scrollbar-width: none; }
   padding: 5px 12px;
 }
 
-/* ---------- scroll cue ---------- */
+
 .scroll-cue {
   position: absolute;
   left: 50%;
@@ -515,7 +515,6 @@ main { scrollbar-width: none; }
   50%      { transform: translateX(-50%) translateY(6px); }
 }
 
-/* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .brand, .divider, .enter-btn, .hint {
     animation: none !important;
@@ -545,7 +544,6 @@ main { scrollbar-width: none; }
   }
 }
 
-/* ---------- responsive tweaks ---------- */
 @media (max-width: 560px) {
   .navbar {
     flex-wrap: wrap;
