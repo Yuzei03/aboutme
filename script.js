@@ -1,4 +1,4 @@
-// ---------- element refs ----------
+
 const splash = document.getElementById('splash');
 const site = document.getElementById('site');
 const enterBtn = document.getElementById('enterBtn');
@@ -10,10 +10,10 @@ const volFill = document.getElementById('volFill');
 const volThumb = document.getElementById('volThumb');
 const volMute = document.getElementById('volMute');
 
-// ---------- audio setup ----------
+
 const bgMusic = document.getElementById('bgMusic');
 let muted = false;
-let lastVolume = 0.4; // keep last non-zero volume for unmute
+let lastVolume = 0.4; 
 
 function setVolumeUI(pct) {
   const clamped = Math.max(0, Math.min(100, pct));
@@ -41,10 +41,9 @@ function applyVolume(pct) {
 function initAudio() {
   bgMusic.volume = lastVolume;
   setVolumeUI(Math.round(lastVolume * 100));
-  // play() returns a promise; browsers may still block until a gesture,
-  // but the enter click counts as one, so this should succeed.
+
   return bgMusic.play().catch(() => {
-    // silent fallback — user can still use the slider / mute button
+
   });
 }
 
@@ -63,32 +62,31 @@ function playBlip() {
     gain.connect(ctx.destination);
     osc.start();
     osc.stop(ctx.currentTime + 0.16);
-  } catch (e) { /* ignore */ }
+  } catch (e) {  }
 }
 
-// volume slider
+
 volSlider.addEventListener('input', () => {
   applyVolume(Number(volSlider.value));
 });
 
-// mute / unmute toggle on the speaker icon
 volMute.addEventListener('click', () => {
   if (muted || bgMusic.volume === 0) {
-    // unmute to last volume (or 40% if never set)
+   
     const restore = lastVolume > 0 ? lastVolume : 0.4;
     applyVolume(Math.round(restore * 100));
     if (bgMusic.paused) initAudio();
   } else {
-    // mute (remember current volume)
+  
     lastVolume = bgMusic.volume || lastVolume;
     applyVolume(0);
   }
 });
 
-// initial UI state
+
 setVolumeUI(40);
 
-// ---------- enter transition (slide) ----------
+
 enterBtn.addEventListener('click', () => {
   if (splash.classList.contains('slide-out')) return;
   initAudio();
@@ -112,7 +110,7 @@ enterBtn.addEventListener('click', () => {
   window.setTimeout(revealSite, 900);
 });
 
-// ---------- scroll-driven paging ----------
+
 const pageOrder = Array.from(pages);
 let activeIndex = 0;
 let isSnapping = false;
@@ -139,7 +137,7 @@ function goToIndex(index, { silent } = {}) {
   goToIndex._t = window.setTimeout(() => { isSnapping = false; }, 700);
 }
 
-// wheel: one gesture = one page
+
 let wheelCooldown = false;
 scrollArea.addEventListener('wheel', (e) => {
   e.preventDefault();
@@ -156,7 +154,7 @@ scrollArea.addEventListener('wheel', (e) => {
   }
 }, { passive: false });
 
-// touch swipe
+
 let touchStartY = null;
 scrollArea.addEventListener('touchstart', (e) => {
   touchStartY = e.touches[0].clientY;
@@ -170,7 +168,7 @@ scrollArea.addEventListener('touchend', (e) => {
   goToIndex(activeIndex + (delta > 0 ? 1 : -1));
 }, { passive: true });
 
-// keyboard
+
 window.addEventListener('keydown', (e) => {
   if (splash.style.display !== 'none') return;
   if (['ArrowDown', 'PageDown'].includes(e.key)) {
@@ -182,7 +180,7 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-// tab clicks
+
 tabs.forEach((tab) => {
   tab.addEventListener('click', () => {
     const index = pageOrder.findIndex((p) => p.id === tab.dataset.page);
@@ -191,14 +189,13 @@ tabs.forEach((tab) => {
   });
 });
 
-// reveal-on-scroll (slide + fade)
+
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
       entry.target.classList.add('in-view');
     } else {
-      // allow content to slide out a bit when leaving so the next page's
-      // enter feels continuous
+  
       entry.target.classList.remove('in-view');
     }
   });
@@ -206,7 +203,7 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 pageOrder.forEach((page) => revealObserver.observe(page));
 
-// keep active tab in sync
+
 const tabSyncObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting && entry.intersectionRatio > 0.55) {
