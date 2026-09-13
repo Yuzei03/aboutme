@@ -88,28 +88,42 @@ volMute.addEventListener('click', () => {
 // initial UI state
 setVolumeUI(40);
 
-// ---------- enter transition (slide) ----------
-enterBtn.addEventListener('click', () => {
-  if (splash.classList.contains('slide-out')) return;
+// ---------- enter transition ----------
+// Start the splash exit and site entrance at the same time. This keeps the
+// transition identical on desktop and mobile and avoids waiting on a
+// transitionend event before revealing the page underneath.
+let hasEntered = false;
+
+function enterSite() {
+  if (hasEntered) return;
+  hasEntered = true;
+
   initAudio();
-
+  enterBtn.disabled = true;
   splash.classList.add('slide-out');
+  site.classList.add('site-enter');
 
-  let revealed = false;
-  function revealSite() {
-    if (revealed) return;
-    revealed = true;
+  // Remove the splash after its exit animation has completed. The timeout is
+  // only a fallback for browsers that don't fire transitionend reliably.
+  const finish = () => {
     splash.style.display = 'none';
-    site.classList.add('site-enter');
+    splash.removeEventListener('transitionend', onTransitionEnd);
+  };
+
+  const onTransitionEnd = (e) => {
+    if (e.target === splash && e.propertyName === 'transform') finish();
+  };
+
+  splash.addEventListener('transitionend', onTransitionEnd);
+  window.setTimeout(finish, 950);
+}
+
+enterBtn.addEventListener('click', enterSite);
+enterBtn.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    enterSite();
   }
-
-  splash.addEventListener('transitionend', function onDone(e) {
-    if (e.target !== splash) return;
-    splash.removeEventListener('transitionend', onDone);
-    revealSite();
-  });
-
-  window.setTimeout(revealSite, 900);
 });
 
 // ---------- scroll-driven paging ----------
@@ -127,47 +141,93 @@ function setActiveTabFor(pageId) {
 // must be >= the CSS transition time for .page-inner (0.55s) plus a margin
 // for the smooth scrollIntoView itself, so trackpad inertia can't sneak
 // a second trigger in before the current page finishes settling.
-const SNAP_LOCK_MS = 800;
+const SNAP_LOCK_MS = 700;
+const SNAP_DURATION_MS = 650;
+let snapAnimation = null;
 
-function goToIndex(index, { silent } = {}) {
+function setActiveTabFor(pageId) {
+  tabs.forEach((t) => {
+    t.classList.toggle('active', t.dataset.page === pageId);
+  });
+}
+
+function easeOutCubic(t) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+function stopSnapAnimation() {
+  if (snapAnimation !== null) {
+    cancelAnimationFrame(snapAnimation);
+    snapAnimation = null;
+  }
+}
+
+function animateScrollTo(targetTop, duration = SNAP_DURATION_MS) {
+  stopSnapAnimation();
+
+  const startTop = scrollArea.scrollTop;
+  const distance = targetTop - startTop;
+  if (Math.abs(distance) < 1) {
+    scrollArea.scrollTop = targetTop;
+    return Promise.resolve();
+  }
+
+  const startTime = performance.now();
+
+  return new Promise((resolve) => {
+    function frame(now) {
+      const progress = Math.min(1, (now - startTime) / duration);
+      scrollArea.scrollTop = startTop + distance * easeOutCubic(progress);
+
+      if (progress < 1) {
+        snapAnimation = requestAnimationFrame(frame);
+      } else {
+        snapAnimation = null;
+        scrollArea.scrollTop = targetTop;
+        resolve();
+      }
+    }
+
+    snapAnimation = requestAnimationFrame(frame);
+  });
+}
+
+function goToIndex(index, { silent = false } = {}) {
   const clamped = Math.max(0, Math.min(pageOrder.length - 1, index));
   if (clamped === activeIndex && !silent) return;
 
   isSnapping = true;
   activeIndex = clamped;
+
   const target = pageOrder[activeIndex];
-  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const targetTop = target.offsetTop;
   setActiveTabFor(target.id);
 
   if (!silent) playBlip();
 
-  window.clearTimeout(goToIndex._t);
-  goToIndex._t = window.setTimeout(() => { isSnapping = false; }, SNAP_LOCK_MS);
+  animateScrollTo(targetTop).finally(() => {
+    window.clearTimeout(goToIndex._t);
+    goToIndex._t = window.setTimeout(() => {
+      isSnapping = false;
+    }, SNAP_LOCK_MS);
+  });
 }
 
-// wheel: trigger on the first real scroll input of a gesture, then lock
-// (via isSnapping, set inside goToIndex) so trailing inertia events from
-// the same trackpad swipe or mouse-wheel spin don't skip extra pages.
-//
-// Different input devices/browsers report e.deltaY on totally different
-// scales, so it has to be normalized before comparing against a threshold:
-//   deltaMode 0 (DOM_DELTA_PIXEL) - most trackpads, Chrome/Edge/Safari mouse
-//   deltaMode 1 (DOM_DELTA_LINE)  - Firefox's default for a physical mouse
-//                                   wheel; raw values are tiny (~3), so
-//                                   without this a mouse wheel on desktop
-//                                   could never reach a pixel-sized threshold
-//   deltaMode 2 (DOM_DELTA_PAGE)  - rare, one wheel "click" = one page
-const WHEEL_MIN_DELTA = 4; // ignore near-zero jitter/noise, in normalized px
+// Desktop wheel paging. The wheel event is intentionally handled on the
+// scroll container so mouse wheels and trackpads use the same animation as
+// touch and keyboard navigation. Native scrolling is prevented only while
+// paging so one gesture cannot skip through several sections.
+const WHEEL_MIN_DELTA = 4;
 
 scrollArea.addEventListener('wheel', (e) => {
-  e.preventDefault();
-  if (isSnapping) return;
-
   let delta = e.deltaY;
-  if (e.deltaMode === 1) delta *= 16; // lines -> approx px
-  else if (e.deltaMode === 2) delta *= window.innerHeight; // pages -> px
+  if (e.deltaMode === 1) delta *= 16;
+  else if (e.deltaMode === 2) delta *= window.innerHeight;
 
   if (Math.abs(delta) < WHEEL_MIN_DELTA) return;
+
+  e.preventDefault();
+  if (isSnapping) return;
 
   goToIndex(activeIndex + (delta > 0 ? 1 : -1));
 }, { passive: false });
