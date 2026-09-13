@@ -1,4 +1,4 @@
-
+/* ---------- reset & base ---------- */
 * { box-sizing: border-box; }
 
 html, body {
@@ -16,7 +16,7 @@ button {
   cursor: pointer;
 }
 
-
+/* ---------- ambient background glow + grid ---------- */
 .glow-bg {
   position: fixed;
   inset: 0;
@@ -40,7 +40,7 @@ button {
   -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 20%, transparent 75%);
 }
 
-
+/* ---------- splash screen — slide exit ---------- */
 .splash {
   position: fixed;
   inset: 0;
@@ -142,7 +142,7 @@ button {
   50%      { box-shadow: 0 0 26px rgba(255, 128, 202, 0.8), 0 0 58px rgba(255, 128, 202, 0.4); }
 }
 
-
+/* ---------- main site — slides up on enter ---------- */
 .site {
   position: relative;
   z-index: 1;
@@ -181,7 +181,7 @@ button {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-
+/* ---------- topbar / navbar ---------- */
 .topbar {
   flex: 0 0 auto;
   display: flex;
@@ -236,7 +236,7 @@ button {
   transform: scale(0.96);
 }
 
-
+/* ---------- volume control ---------- */
 .vol-control {
   display: flex;
   align-items: center;
@@ -333,7 +333,7 @@ button {
     0 0 14px rgba(255, 143, 209, 0.95);
 }
 
-
+/* ---------- main scroll area ---------- */
 main {
   flex: 1 1 auto;
   min-height: 0;
@@ -377,7 +377,7 @@ main { scrollbar-width: none; }
   transform: translateY(18px);
 }
 
-
+/* ---------- HOME hero ---------- */
 .home-hero {
   display: flex;
   flex-direction: column;
@@ -414,7 +414,7 @@ main { scrollbar-width: none; }
   text-transform: lowercase;
 }
 
-
+/* ---------- ABOUT ---------- */
 .about-wrap {
   max-width: 720px;
   width: 100%;
@@ -491,7 +491,138 @@ main { scrollbar-width: none; }
   padding: 5px 12px;
 }
 
+/* ---------- LINKS ---------- */
+.links-wrap {
+  max-width: 760px;
+  width: 100%;
+  text-align: left;
+}
 
+.links-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding-left: 4px;
+}
+
+.links-title {
+  margin: 0;
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: #f2e4ef;
+}
+
+.links-title span {
+  color: #ff9ed4;
+  text-shadow: 0 0 18px rgba(255, 143, 209, 0.4);
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.link-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  width: 100%;
+  background: rgba(22, 10, 24, 0.82);
+  border: 1px solid rgba(255, 170, 220, 0.12);
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.25),
+    0 20px 50px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-decoration: none;
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.link-card--panel {
+  cursor: pointer;
+}
+
+.link-card.is-copied {
+  border-color: rgba(160, 255, 200, 0.4);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.25),
+    0 0 24px rgba(140, 255, 190, 0.25),
+    0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.link-card.is-copied .link-copy-icon {
+  color: #8affc0;
+}
+
+.link-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 170, 220, 0.3);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.25),
+    0 0 24px rgba(255, 128, 202, 0.25),
+    0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.link-card:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.link-icon {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(43, 20, 40, 0.85);
+  border: 1px solid rgba(255, 170, 220, 0.16);
+  color: #ff9ed4;
+}
+
+.link-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.link-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f2e4ef;
+  letter-spacing: 0.2px;
+}
+
+.link-sub {
+  font-size: 0.72rem;
+  color: #9a7a92;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.link-arrow {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: #b494b0;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.link-card:hover .link-arrow {
+  color: #ff9ed4;
+  transform: translate(2px, -2px);
+}
+
+/* ---------- scroll cue ---------- */
 .scroll-cue {
   position: absolute;
   left: 50%;
@@ -515,6 +646,7 @@ main { scrollbar-width: none; }
   50%      { transform: translateX(-50%) translateY(6px); }
 }
 
+/* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .brand, .divider, .enter-btn, .hint {
     animation: none !important;
@@ -544,6 +676,7 @@ main { scrollbar-width: none; }
   }
 }
 
+/* ---------- responsive tweaks ---------- */
 @media (max-width: 560px) {
   .navbar {
     flex-wrap: wrap;
@@ -565,5 +698,11 @@ main { scrollbar-width: none; }
   }
   .hero-name {
     letter-spacing: -1px;
+  }
+  .links-grid {
+    grid-template-columns: 1fr;
+  }
+  .link-card {
+    padding: 16px;
   }
 }

@@ -142,34 +142,34 @@ function goToIndex(index, { silent } = {}) {
   if (!silent) playBlip();
 
   window.clearTimeout(goToIndex._t);
-  goToIndex._t = window.setTimeout(() => { isSnapping = false; wheelDelta = 0; }, SNAP_LOCK_MS);
+  goToIndex._t = window.setTimeout(() => { isSnapping = false; }, SNAP_LOCK_MS);
 }
 
-// wheel: accumulate delta so one trackpad/mouse gesture (which fires many
-// small wheel events) only ever moves one page, instead of the leftover
-// events from the same swipe re-triggering the page change mid-animation.
-let wheelDelta = 0;
-const WHEEL_THRESHOLD = 60; // total accumulated deltaY needed to flip a page
-let wheelResetTimer = null;
+// wheel: trigger on the first real scroll input of a gesture, then lock
+// (via isSnapping, set inside goToIndex) so trailing inertia events from
+// the same trackpad swipe or mouse-wheel spin don't skip extra pages.
+//
+// Different input devices/browsers report e.deltaY on totally different
+// scales, so it has to be normalized before comparing against a threshold:
+//   deltaMode 0 (DOM_DELTA_PIXEL) - most trackpads, Chrome/Edge/Safari mouse
+//   deltaMode 1 (DOM_DELTA_LINE)  - Firefox's default for a physical mouse
+//                                   wheel; raw values are tiny (~3), so
+//                                   without this a mouse wheel on desktop
+//                                   could never reach a pixel-sized threshold
+//   deltaMode 2 (DOM_DELTA_PAGE)  - rare, one wheel "click" = one page
+const WHEEL_MIN_DELTA = 4; // ignore near-zero jitter/noise, in normalized px
 
 scrollArea.addEventListener('wheel', (e) => {
   e.preventDefault();
   if (isSnapping) return;
 
-  wheelDelta += e.deltaY;
+  let delta = e.deltaY;
+  if (e.deltaMode === 1) delta *= 16; // lines -> approx px
+  else if (e.deltaMode === 2) delta *= window.innerHeight; // pages -> px
 
-  // if the person pauses mid-gesture without crossing the threshold,
-  // forget the partial gesture instead of letting it carry over
-  window.clearTimeout(wheelResetTimer);
-  wheelResetTimer = window.setTimeout(() => { wheelDelta = 0; }, 200);
+  if (Math.abs(delta) < WHEEL_MIN_DELTA) return;
 
-  if (Math.abs(wheelDelta) < WHEEL_THRESHOLD) return;
-
-  const direction = wheelDelta > 0 ? 1 : -1;
-  wheelDelta = 0;
-  window.clearTimeout(wheelResetTimer);
-
-  goToIndex(activeIndex + direction);
+  goToIndex(activeIndex + (delta > 0 ? 1 : -1));
 }, { passive: false });
 
 // touch swipe
@@ -237,3 +237,41 @@ const tabSyncObserver = new IntersectionObserver((entries) => {
 }, { root: scrollArea, threshold: [0.55] });
 
 pageOrder.forEach((page) => tabSyncObserver.observe(page));
+
+// ---------- discord "copy username" panel ----------
+const discordCopy = document.getElementById('discordCopy');
+if (discordCopy) {
+  const subEl = document.getElementById('discordCopySub');
+  const username = discordCopy.dataset.username;
+  const defaultLabel = subEl.textContent;
+  let resetTimer = null;
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) { /* ignore */ }
+    document.body.removeChild(ta);
+  }
+
+  discordCopy.addEventListener('click', () => {
+    const copyPromise = (navigator.clipboard && window.isSecureContext)
+      ? navigator.clipboard.writeText(username)
+      : Promise.resolve(fallbackCopy(username));
+
+    copyPromise.catch(() => fallbackCopy(username)).finally(() => {
+      discordCopy.classList.add('is-copied');
+      subEl.textContent = 'copied to clipboard!';
+      playBlip();
+
+      window.clearTimeout(resetTimer);
+      resetTimer = window.setTimeout(() => {
+        discordCopy.classList.remove('is-copied');
+        subEl.textContent = defaultLabel;
+      }, 1600);
+    });
+  });
+}

@@ -14,7 +14,7 @@
   <div class="glow-bg" aria-hidden="true"></div>
   <div class="grid-bg" aria-hidden="true"></div>
 
-
+  <!-- SPLASH / LANDING SCREEN -->
   <section id="splash" class="splash">
     <div class="splash-inner">
       <h1 class="brand">.klyde.</h1>
@@ -24,13 +24,14 @@
     </div>
   </section>
 
-
+  <!-- MAIN SITE -->
   <div id="site" class="site">
     <header class="topbar">
       <nav class="navbar">
         <span class="nav-brand">.klyde.</span>
         <button class="tab active" data-page="home">home</button>
         <button class="tab" data-page="about">about</button>
+        <button class="tab" data-page="links">links</button>
         <div class="vol-control" title="Volume">
           <button id="volMute" class="vol-icon" aria-label="Mute / unmute" type="button">
             <svg class="icon-speaker" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
@@ -55,7 +56,7 @@
     </header>
 
     <main id="scrollArea">
-  
+      <!-- HOME -->
       <section id="home" class="page page-home">
         <div class="page-inner home-hero">
           <h1 class="hero-name">klyde</h1>
@@ -68,7 +69,7 @@
         </div>
       </section>
 
-   
+      <!-- ABOUT -->
       <section id="about" class="page page-about">
         <div class="page-inner about-wrap">
           <div class="about-header">
@@ -77,13 +78,77 @@
           </div>
           <div class="about-card">
             <p class="about-text">
-              Hello there! I'm Klyde, also known as "Glucose." This is a small personal space for projects, studies, and whatever else I'm building. I care about communities that feel good to be in. Outside of that you'll usually find me gaming, studying, or tinkering with new ideas.
+              Hello there! I'm Klyde, also known as "Glucose." This is a small personal space for projects, streams, and whatever else I'm building. I care about clean design, solid code, and communities that feel good to be in. Outside of that you'll usually find me gaming, streaming, or tinkering with new ideas.
             </p>
             <div class="about-tags">
               <span class="tag">student</span>
               <span class="tag">gamer</span>
             
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LINKS -->
+      <section id="links" class="page page-links">
+        <div class="page-inner links-wrap">
+          <div class="links-header">
+            <span class="section-num">02</span>
+            <h2 class="links-title">find <span>me</span></h2>
+          </div>
+          <div class="links-grid">
+            <a class="link-card" href="https://www.tiktok.com/@klaiide._" target="_blank" rel="noopener">
+              <div class="link-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M17 4v9.6a3.6 3.6 0 1 1-2.2-3.32V4H17Z"/>
+                  <path d="M17 4c.3 2.1 1.9 3.6 4.1 3.8"/>
+                </svg>
+              </div>
+              <div class="link-text">
+                <span class="link-name">tiktok</span>
+                <span class="link-sub">clips &amp; edits</span>
+              </div>
+              <svg class="link-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M7 17L17 7M9 7h8v8"/>
+              </svg>
+            </a>
+
+            <a class="link-card" href="https://www.instagram.com/itsyaboi_klyde03?stkn=NTBmOG56bHBib2cz&utm_source=qr" target="_blank" rel="noopener">
+              <div class="link-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3.5" y="3.5" width="17" height="17" rx="5"/>
+                  <circle cx="12" cy="12" r="4.2"/>
+                  <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <div class="link-text">
+                <span class="link-name">instagram</span>
+                <span class="link-sub">photos &amp; fits</span>
+              </div>
+              <svg class="link-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M7 17L17 7M9 7h8v8"/>
+              </svg>
+            </a>
+
+            <button type="button" class="link-card link-card--panel" id="discordCopy" data-username="klaii_.">
+              <div class="link-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M8 8.4c2.7-1 5.3-1 8 0"/>
+                  <path d="M7 9c-1.5 2-2 5-1.7 7.3 1.6 1.2 3.1 1.9 4.6 2.3l.9-1.5"/>
+                  <path d="M17 9c1.5 2 2 5 1.7 7.3-1.6 1.2-3.1 1.9-4.6 2.3l-.9-1.5"/>
+                  <circle cx="9.3" cy="13" r="1.1" fill="currentColor" stroke="none"/>
+                  <circle cx="14.7" cy="13" r="1.1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <div class="link-text">
+                <span class="link-name">discord</span>
+                <span class="link-sub" id="discordCopySub">klaii_.  ·  tap to copy</span>
+              </div>
+              <svg class="link-arrow link-copy-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="8.5" y="8.5" width="10" height="10" rx="2"/>
+                <path d="M5.5 15.5V7a1.5 1.5 0 0 1 1.5-1.5h8.5"/>
+              </svg>
+            </button>
           </div>
         </div>
       </section>
