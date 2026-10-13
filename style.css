@@ -129,10 +129,35 @@ body:has(.tab[data-page="links"].active) .hill-3 { transform: translateX(-16px);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  overflow: hidden;
+  background: linear-gradient(180deg, #25285a 0%, #4a3a7a 30%, #9a5f8f 56%, #ee9a82 80%, #f8cf8e 100%);
   transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.85s ease;
   will-change: transform, opacity;
 }
+
+.splash-sun {
+  position: absolute;
+  left: 50%;
+  bottom: 24vh;
+  width: clamp(180px, 22vw, 290px);
+  aspect-ratio: 1;
+  margin-left: calc(clamp(180px, 22vw, 290px) / -2);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, #fff3c9 0%, #fbd98f 45%, #f6b27c 100%);
+  box-shadow: 0 0 80px 40px rgba(251, 217, 143, 0.45), 0 0 200px 100px rgba(246, 178, 124, 0.3);
+}
+
+.splash-hills {
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%;
+  height: 40vh;
+  min-height: 240px;
+  display: block;
+}
+
+/* the page stays hidden until the visitor enters */
+.site:not(.site-enter) { visibility: hidden; }
 
 .splash.slide-out {
   transform: translate3d(0, -110%, 0);
@@ -145,6 +170,8 @@ body:has(.tab[data-page="links"].active) .hill-3 { transform: translateX(-16px);
   flex-direction: column;
   align-items: center;
   text-align: center;
+  position: relative;
+  z-index: 1;
   margin-top: -14vh;
 }
 
