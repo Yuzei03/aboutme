@@ -6,13 +6,21 @@
 <title>.klyde.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="glow-bg" aria-hidden="true"></div>
-  <div class="grid-bg" aria-hidden="true"></div>
+  <!-- LANDSCAPE: dusk sky, sun, layered hills -->
+  <div class="sky" aria-hidden="true"></div>
+  <div class="stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="sun" aria-hidden="true"></div>
+  <svg class="hills" viewBox="0 0 1440 420" preserveAspectRatio="none" aria-hidden="true">
+    <path class="hill-1" d="M-40 210 C 120 130, 300 150, 470 200 C 640 250, 760 120, 940 130 C 1120 140, 1260 200, 1480 150 L1480 420 L-40 420 Z" fill="#7a72a8"/>
+    <path class="hill-2" d="M-40 270 C 140 200, 330 230, 520 270 C 700 310, 840 200, 1020 215 C 1200 230, 1320 290, 1480 250 L1480 420 L-40 420 Z" fill="#5d8480"/>
+    <path class="hill-3" d="M-40 330 C 160 270, 380 300, 580 335 C 780 370, 940 280, 1130 295 C 1280 307, 1380 340, 1480 320 L1480 420 L-40 420 Z" fill="#3f6b57"/>
+    <path class="hill-4" d="M-40 385 C 240 345, 460 370, 700 392 C 940 414, 1160 350, 1480 380 L1480 420 L-40 420 Z" fill="#1f342d"/>
+  </svg>
 
   <!-- SPLASH / LANDING SCREEN -->
   <section id="splash" class="splash">
@@ -59,6 +67,7 @@
       <!-- HOME -->
       <section id="home" class="page page-home">
         <div class="page-inner home-hero">
+          <p class="hero-hello">hello, i'm</p>
           <h1 class="hero-name">klyde</h1>
           <p class="hero-aka">A.K.A. GLUCOSE</p>
           <p class="hero-roles">student · gamer</p>
