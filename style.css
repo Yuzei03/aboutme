@@ -138,10 +138,10 @@ body:has(.tab[data-page="links"].active) .hill-3 { transform: translateX(-16px);
 .splash-sun {
   position: absolute;
   left: 50%;
-  bottom: 24vh;
-  width: clamp(180px, 22vw, 290px);
+  bottom: 26vh;
+  width: clamp(190px, 24vw, 320px);
   aspect-ratio: 1;
-  margin-left: calc(clamp(180px, 22vw, 290px) / -2);
+  margin-left: calc(clamp(190px, 24vw, 320px) / -2);
   border-radius: 50%;
   background: radial-gradient(circle at 50% 50%, #fff3c9 0%, #fbd98f 45%, #f6b27c 100%);
   box-shadow: 0 0 80px 40px rgba(251, 217, 143, 0.45), 0 0 200px 100px rgba(246, 178, 124, 0.3);
@@ -151,18 +151,51 @@ body:has(.tab[data-page="links"].active) .hill-3 { transform: translateX(-16px);
   position: absolute;
   left: 0; bottom: 0;
   width: 100%;
-  height: 40vh;
-  min-height: 240px;
+  height: 42vh;
+  min-height: 260px;
   display: block;
 }
 
 /* the page stays hidden until the visitor enters */
 .site:not(.site-enter) { visibility: hidden; }
 
+/* on enter: the splash pieces scatter away, then the sky fades to the
+   identical landscape underneath while the page assembles */
 .splash.slide-out {
-  transform: translate3d(0, -110%, 0);
   opacity: 0;
   pointer-events: none;
+  transition: opacity 0.55s ease 0.3s;
+}
+
+.splash.slide-out .ch {
+  animation: scatter 0.7s cubic-bezier(0.55, 0, 0.9, 0.4) forwards;
+  animation-delay: calc(var(--i) * 0.03s);
+}
+.splash.slide-out .ch:nth-child(1) { --x: -320px; --y: -260px; --r: -50deg; }
+.splash.slide-out .ch:nth-child(2) { --x: -140px; --y: -340px; --r: 40deg; }
+.splash.slide-out .ch:nth-child(3) { --x: 60px;   --y: -380px; --r: -30deg; }
+.splash.slide-out .ch:nth-child(4) { --x: 200px;  --y: -300px; --r: 55deg; }
+.splash.slide-out .ch:nth-child(5) { --x: 340px;  --y: -200px; --r: -45deg; }
+.splash.slide-out .ch:nth-child(6) { --x: 420px;  --y: -320px; --r: 35deg; }
+.splash.slide-out .ch:nth-child(7) { --x: 520px;  --y: -240px; --r: -60deg; }
+
+.splash.slide-out .enter-btn { animation: shootOut 0.6s cubic-bezier(0.55, 0, 0.9, 0.4) forwards; }
+.splash.slide-out .hint      { animation: fadeAway 0.35s ease forwards; }
+.splash.slide-out .divider   { animation: shrinkLine 0.4s ease forwards; }
+
+@keyframes scatter {
+  to { opacity: 0; transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(0.3); }
+}
+@keyframes shootOut {
+  to { opacity: 0; transform: translateY(220px) scale(0.3) rotate(8deg); }
+}
+@keyframes fadeAway { to { opacity: 0; } }
+@keyframes shrinkLine { to { width: 0; opacity: 0; } }
+
+/* every piece of the page flies in from a different spot and snaps into place */
+@keyframes assemble {
+  from { opacity: 0; transform: translate(var(--x, 0), var(--y, 0)) rotate(var(--r, 0deg)) scale(var(--s, 0.4)); }
+  to   { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
 .splash-inner {
@@ -183,10 +216,14 @@ body:has(.tab[data-page="links"].active) .hill-3 { transform: translateX(-16px);
   letter-spacing: 2px;
   color: #fff6e6;
   text-shadow: 0 6px 36px rgba(37, 40, 90, 0.5);
-  opacity: 0;
-  transform: translateY(14px);
-  animation: fadeUp 0.8s ease forwards;
-  animation-delay: 0.15s;
+  display: flex;
+}
+
+/* each letter of the logo drops in and bounces */
+.brand .ch {
+  display: inline-block;
+  animation: dropIn 0.95s cubic-bezier(0.34, 1.2, 0.5, 1) backwards;
+  animation-delay: calc(0.1s + var(--i) * 0.09s);
 }
 
 .divider {
@@ -196,7 +233,7 @@ body:has(.tab[data-page="links"].active) .hill-3 { transform: translateX(-16px);
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
   box-shadow: 0 0 8px rgba(251, 217, 143, 0.6);
   animation: growLine 0.9s ease forwards;
-  animation-delay: 0.55s;
+  animation-delay: 0.8s;
 }
 
 .enter-btn {
@@ -209,10 +246,7 @@ body:has(.tab[data-page="links"].active) .hill-3 { transform: translateX(-16px);
   color: var(--ink);
   background: var(--cream);
   box-shadow: 0 8px 30px rgba(37, 40, 90, 0.35), 0 0 30px rgba(251, 217, 143, 0.35);
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeUp 0.8s ease forwards, pulseGlow 2.6s ease-in-out infinite;
-  animation-delay: 0.9s, 2s;
+  animation: jumpIn 0.9s cubic-bezier(0.34, 1.4, 0.5, 1) 1s backwards, pulseGlow 2.6s ease-in-out 2.2s infinite;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -229,14 +263,44 @@ body:has(.tab[data-page="links"].active) .hill-3 { transform: translateX(-16px);
   letter-spacing: 0.5px;
   color: var(--cream);
   text-shadow: 0 1px 12px rgba(37, 40, 90, 0.6);
-  opacity: 0;
-  animation: fadeUp 0.8s ease forwards;
-  animation-delay: 1.15s;
+  animation: flyUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.5s backwards;
   max-width: 90vw;
   line-height: 1.4;
 }
 
-@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+/* letters fall from above and settle with a bounce */
+@keyframes dropIn {
+  0%   { opacity: 0; transform: translateY(-160px) rotate(-14deg) scale(0.8); }
+  55%  { opacity: 1; transform: translateY(18px) rotate(3deg) scale(1.04); }
+  75%  { transform: translateY(-8px) rotate(-1deg); }
+  90%  { transform: translateY(3px); }
+  100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+}
+
+/* springy hop up from below with overshoot */
+@keyframes jumpIn {
+  0%   { opacity: 0; transform: translateY(90px) scale(0.6); }
+  60%  { opacity: 1; transform: translateY(-16px) scale(1.06); }
+  80%  { transform: translateY(5px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes flyUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes flyLeft {
+  from { opacity: 0; transform: translateX(-120px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes flyRight {
+  from { opacity: 0; transform: translateX(120px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
 @keyframes growLine { to { width: min(220px, 60vw); } }
 @keyframes pulseGlow {
   0%, 100% { box-shadow: 0 8px 30px rgba(37, 40, 90, 0.35), 0 0 24px rgba(251, 217, 143, 0.3); }
@@ -255,21 +319,57 @@ body:has(.tab[data-page="links"].active) .hill-3 { transform: translateX(-16px);
   will-change: transform, opacity;
 }
 
-.site.site-enter { animation: siteSlideIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-
-.site.site-enter .topbar {
-  opacity: 0;
-  transform: translateY(-18px);
-  animation: fadeUp 0.7s ease forwards;
-  animation-delay: 0.2s;
-}
+/* the wrapper just appears; its pieces do the moving */
+.site.site-enter { opacity: 1; transform: none; animation: none; }
 
 .site.site-enter #home .page-inner {
-  opacity: 0;
-  transform: translateY(28px);
-  animation: slideInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  animation-delay: 0.35s;
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
+
+/* ---- enter: assemble the navbar ---- */
+.site.site-enter .nav-brand,
+.site.site-enter .tab,
+.site.site-enter .vol-control,
+.site.site-enter .hero-hello,
+.site.site-enter .hero-aka,
+.site.site-enter .hero-roles,
+.site.site-enter .hero-name .hl {
+  animation: assemble 1s cubic-bezier(0.34, 1.35, 0.5, 1) backwards;
+}
+
+.site.site-enter .nav-brand            { --x: -260px; --y: -90px;  --r: -22deg; animation-delay: 0.55s; }
+.site.site-enter .tab:nth-of-type(1)   { --x: -140px; --y: -150px; --r: 16deg;  animation-delay: 0.65s; }
+.site.site-enter .tab:nth-of-type(2)   { --x: 70px;   --y: -170px; --r: -14deg; animation-delay: 0.75s; }
+.site.site-enter .tab:nth-of-type(3)   { --x: 200px;  --y: -130px; --r: 20deg;  animation-delay: 0.85s; }
+.site.site-enter .vol-control          { --x: 300px;  --y: -100px; --r: 12deg;  animation-delay: 0.95s; }
+
+/* ---- enter: assemble the hero ---- */
+.hero-name .hl { display: inline-block; }
+.site.site-enter .hero-name .hl { animation-duration: 1.1s; animation-delay: calc(0.7s + var(--i) * 0.09s); --s: 0.2; }
+.hero-name .hl:nth-child(1) { --x: -420px; --y: -260px; --r: -50deg; }
+.hero-name .hl:nth-child(2) { --x: 160px;  --y: -340px; --r: 35deg; }
+.hero-name .hl:nth-child(3) { --x: -120px; --y: 320px;  --r: -30deg; }
+.hero-name .hl:nth-child(4) { --x: 340px;  --y: 240px;  --r: 55deg; }
+.hero-name .hl:nth-child(5) { --x: 480px;  --y: -200px; --r: -40deg; }
+
+.site.site-enter .hero-hello { --x: -320px; --y: 80px;  --r: -10deg; animation-delay: 1.1s; }
+.site.site-enter .hero-aka   { --x: 380px;  --y: 100px; --r: 8deg;   animation-delay: 1.3s; }
+.site.site-enter .hero-roles { --x: -260px; --y: 180px; --r: -8deg;  animation-delay: 1.45s; }
+
+/* about + links content flies in each time the page comes into view */
+.page.in-view .about-header,
+.page.in-view .links-header { animation: flyLeft 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+.page.in-view .about-card   { animation: jumpIn 0.85s cubic-bezier(0.34, 1.3, 0.5, 1) 0.15s backwards; }
+.page.in-view .tag          { animation: jumpIn 0.6s cubic-bezier(0.34, 1.6, 0.5, 1) backwards; }
+.page.in-view .tag:nth-child(1) { animation-delay: 0.5s; }
+.page.in-view .tag:nth-child(2) { animation-delay: 0.62s; }
+.page.in-view .tag:nth-child(3) { animation-delay: 0.74s; }
+.page.in-view .link-card    { animation: jumpIn 0.8s cubic-bezier(0.34, 1.4, 0.5, 1) backwards; }
+.page.in-view .link-card:nth-child(1) { animation-delay: 0.15s; }
+.page.in-view .link-card:nth-child(2) { animation-delay: 0.3s; }
+.page.in-view .link-card:nth-child(3) { animation-delay: 0.45s; }
 
 @keyframes siteSlideIn {
   from { opacity: 0; transform: translate3d(0, 40px, 0); }
@@ -681,27 +781,12 @@ main { scrollbar-width: none; }
 }
 
 /* ---------- reduced motion ---------- */
+/* Only the endless loops are switched off; the one-time entrance
+   animations still play so the page never looks flat. */
 @media (prefers-reduced-motion: reduce) {
-  .brand, .divider, .enter-btn, .hint {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-  .divider { width: min(220px, 60vw) !important; }
   .stars i { animation: none; }
-  .sun, .sky, .hills path { transition: none; }
-  .scroll-cue {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: translateX(-50%) !important;
-  }
-  .splash, .page, .page-inner, .site, .topbar {
-    transition: opacity 0.01s linear !important;
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-  .splash.slide-out { transform: none; opacity: 0; }
+  .enter-btn { animation: jumpIn 0.9s cubic-bezier(0.34, 1.4, 0.5, 1) 1s backwards; }
+  .scroll-cue { animation: fadeUp 0.8s ease 1.4s backwards; }
   main { scroll-snap-type: none; }
 }
 
